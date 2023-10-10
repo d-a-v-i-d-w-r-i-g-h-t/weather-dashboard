@@ -3,6 +3,8 @@ var locationInputEl = document.getElementById("location");
 var searchHistoryContainerEl = document.getElementById("search-history-container");
 
 const APIKEY = "8a460ddb56358cc62f71346e740a0abf";
+
+var searchHistory = [];
 var latitude = 0;
 var longitude = 0;
 
@@ -150,7 +152,7 @@ var performCurrentWeatherSearch = function(lat, lon) {
 searchFormEl.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  var searchLocation = locationInputEl.value.trim();
+  var searchLocation = locationInputEl.value.trim().replace(/ /g, "%20");
   console.log("Search location: " + searchLocation);
 
   if (searchLocation) {
@@ -164,9 +166,9 @@ function runWeatherDashboard() {
   loadSearchHistory();
 }
 
-  //---------------------------------------------------------//
-  //  Functions: load, save, and buildSearchHistory  //
-//---------------------------------------------------------//
+  //-------------------------------------------------//
+ //  Functions: load, save, and buildSearchHistory  //
+//-------------------------------------------------//
 
 function loadSearchHistory() {
   searchHistory = JSON.parse(localStorage.getItem("searchHistoryStringify"));
@@ -193,9 +195,7 @@ function saveSearchHistory(location) {
 }
 
 function buildSearchHistory() {
-  
-  // empty the region
-  //$("searchHistoryEl").empty();
+  document.getElementById("search-history-container").replaceChildren();
 
   for (var i = 0; i < searchHistory.length; i++) {
     addSearchHistoryButton(i);
@@ -203,8 +203,11 @@ function buildSearchHistory() {
 }
 
 function addSearchHistoryButton(i) {
-  var newDiv = "<div>";
-  newDiv
+  var newDiv = document.createElement("div");
+  newDiv.textContent = searchHistory[i];
+  newDiv.setAttribute("id", "button" + i);
+  newDiv.classList.add("button");
+  document.getElementById("search-history-container").appendChild(newDiv);
 }
 
 // <button type="button" class="btn btn-primary">Primary</button>

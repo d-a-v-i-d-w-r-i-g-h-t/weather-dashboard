@@ -23,25 +23,28 @@
 
 <body>
 
-  <div id="search-container">
-    <form id="search-form">
-      <input type="text" id="location" name="location" placeholder="Enter a location...">
-      <button type="submit" class="btn">Search!</button>
-    </form>
+  <div class="container">
+    <div class="row">
+      <div id="search-container" class="col col-2">
+        <form id="search-form">
+          <input type="text" id="location" name="location" placeholder="Enter a location...">
+          <button type="submit" class="btn">Search!</button>
+        </form>
 
-    <div id="search-history">
+        <div id="search-history">
 
-      <h2>Search History</h2>
+          <h2>Search History</h2>
 
-      <div id="search-history-container"></div>
+          <div id="search-history-container"></div>
 
-    </div>
+        </div>
+      </div>
 
-    <div id="results-display">
-
+      <div id="results-container" class="col col-10">
+        <h2>Results</h2>
+      </div>
     </div>
   </div>
-
 
 
     <!-- link to jQuery javascript file -->
