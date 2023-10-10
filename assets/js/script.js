@@ -162,9 +162,8 @@ searchFormEl.addEventListener("submit", function (event) {
 });
 
 
-function runWeatherDashboard() {
-  loadSearchHistory();
-}
+
+
 
   //-------------------------------------------------//
  //  Functions: load, save, and buildSearchHistory  //
@@ -195,7 +194,7 @@ function saveSearchHistory(location) {
 }
 
 function buildSearchHistory() {
-  document.getElementById("search-history-container").replaceChildren();
+  searchHistoryContainerEl.replaceChildren();
 
   for (var i = 0; i < searchHistory.length; i++) {
     addSearchHistoryButton(i);
@@ -205,9 +204,23 @@ function buildSearchHistory() {
 function addSearchHistoryButton(i) {
   var newDiv = document.createElement("div");
   newDiv.textContent = searchHistory[i];
-  newDiv.setAttribute("id", "button" + i);
+  newDiv.setAttribute("data-buttonid", i);
   newDiv.classList.add("button");
-  document.getElementById("search-history-container").appendChild(newDiv);
+  searchHistoryContainerEl.appendChild(newDiv);
 }
 
-// <button type="button" class="btn btn-primary">Primary</button>
+searchHistoryContainerEl.addEventListener("click", function(event) {
+  var element = event.target;
+  // console.log(element);
+  if (element.matches(".button")) {
+    // console.log("match");
+    var buttonID = element.getAttribute("data-buttonid");
+    // console.log("Button clicked: " + buttonID);
+    var searchLocation = searchHistory[buttonID];
+    // console.log("location");
+    performLocationSearch(searchLocation);
+  }
+
+});
+
+loadSearchHistory();
