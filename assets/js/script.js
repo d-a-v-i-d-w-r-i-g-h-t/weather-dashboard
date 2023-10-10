@@ -1,13 +1,17 @@
-var searchFormEl = $("#search-form");
-var searchHistoryContainerEl = $("search-history-container");
-
-
-searchFormEl.addEventListener('submit', searchFormSubmit);
 
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
+
+
+  var searchFormEl = $("#search-form");
+  var locationInputEl = $("#location");
+  var searchHistoryContainerEl = $("search-history-container");
+
+
+  searchFormEl.addEventListener('submit', searchFormSubmit);
+
 
   runWeatherDashboard() {
 
@@ -17,8 +21,18 @@ $(function () {
   }
 
 
+  var searchFormSubmit = function (event) {
+    event.preventDefault();
 
+    var location = locationInputEl.value.trim();
 
+    if (location) {
+      performLocationSearch(location);
+      locationInputEl.value = "";
+    }
+  }
+
+  
 
     //---------------------------------------------------------//
    //  Functions: load, save, and buildSearchHistory  //
