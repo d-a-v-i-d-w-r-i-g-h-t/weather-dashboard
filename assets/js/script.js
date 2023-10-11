@@ -1,7 +1,7 @@
 var searchFormEl = document.getElementById("search-form");
 var locationInputEl = document.getElementById("location");
 var searchHistoryContainerEl = document.getElementById("search-history-container");
-var fiveDayForecastEl = document.getElementById("five-day-forecast");
+var resultsContainerEl = document.getElementById("results-container");
 
 // API Key for OpenWeatherMap.org
 const APIKEY = "8a460ddb56358cc62f71346e740a0abf";
@@ -98,39 +98,50 @@ var performCurrentWeatherSearch = function(lat, lon) {
 };
 
 function addCurrentWeather() {
-
-  document.getElementById("city").textContent = currentWeather.city;
+  // empty div
+  resultsContainerEl.replaceChildren();
 
   var newDiv = document.createElement("div");
   newDiv.setAttribute("id", "current-weather");
 
   var newTitleP = document.createElement("p");
   newTitleP.classList.add("current-weather-title");
-
+  newTitleP.textContent = currentWeather.city;
 
   var newDateP = document.createElement("p");
-  newDateP.classList.add("forecast-card-date");
-  newDateP.textContent =   forecastWeather[index].date.format("MMM D, YYYY");
+  newDateP.textContent = currentWeather.date;
+  
+  var newContainer = document.createElement("div");
+  newContainer.classList.add("content-container");
 
   var newImg = document.createElement("img");
-  newImg.setAttribute("src", "./assets/images/" + forecastWeather[index].icon + ".png");
+  newImg.setAttribute("src", "./assets/images/" + currentWeather.icon + ".png");
+  newImg.setAttribute("alt", "weather icon");
+  newImg.setAttribute("width", "100");
+  newImg.setAttribute("height", "100");
+  
+  var newTextDiv = document.createElement("div");
 
   var newTempP = document.createElement("p");
-  newTempP.textContent = "Temp: " + forecastWeather[index].temp + " °F";
+  newTempP.textContent = "Temp: " + currentWeather.temperature + " °F";
   
   var newWindspeedP = document.createElement("p");
-  newWindspeedP.textContent = "Wind: " + forecastWeather[index].windSpeed + " MPH, " + forecastWeather[index].windDirCardinal;
+  newWindspeedP.textContent = "Wind: " + currentWeather.windSpeed + " MPH, " + currentWeather.windDirCardinal;
   
   var newHumidityP = document.createElement("p");
-  newHumidityP.textContent = "Humidity: " + forecastWeather[index].humidity + "%";
-  
-  fiveDayForecastEl.appendChild(newDiv);
-  newDiv.appendChild(newDateP);
-  newDiv.appendChild(newImg);
-  newDiv.appendChild(newTempP);
-  newDiv.appendChild(newWindspeedP);
-  newDiv.appendChild(newHumidityP);
+  newHumidityP.textContent = "Humidity: " + currentWeather.humidity + "%";
 
+  resultsContainerEl.appendChild(newDiv);
+  newDiv.appendChild(newTitleP);
+  newDiv.appendChild(newDateP);
+  newDiv.appendChild(newContainer);
+
+  newContainer.appendChild(newImg);
+  newContainer.appendChild(newTextDiv);
+  
+  newTextDiv.appendChild(newTempP);
+  newTextDiv.appendChild(newWindspeedP);
+  newTextDiv.appendChild(newHumidityP);
 }
 
 var performForecastWeatherSearch = function(lat, lon) {
@@ -185,9 +196,15 @@ var performForecastWeatherSearch = function(lat, lon) {
 };
 
 
+   //------------------------------------//
+  //  Functions: createFiveDayForecast  //
+ //------------------------------------//
+// create forecast card with data from designated index
 function createFiveDayForecast() {
-  // Empty div
-  fiveDayForecastEl.replaceChildren();
+  var newDiv = document.createElement("div");
+  newDiv.setAttribute("id", "five-day-forecast");
+
+  resultsContainerEl.appendChild(newDiv);
 
   var timeHour;
   // forecasts are every three hours for five days
@@ -203,8 +220,13 @@ function createFiveDayForecast() {
   }
 }
 
+
+   //-----------------------------//
+  //  Functions: addForecastDay  //
+ //-----------------------------//
+// create forecast card with data from designated index
 function addForecastDay(index) {
-// create card with designnated data
+// create card with designated data
 
   var newDiv = document.createElement("div");
   newDiv.classList.add("forecast-card");
@@ -225,6 +247,8 @@ function addForecastDay(index) {
   var newHumidityP = document.createElement("p");
   newHumidityP.textContent = "Humidity: " + forecastWeather[index].humidity + "%";
   
+  var fiveDayForecastEl = document.getElementById("five-day-forecast");
+
   fiveDayForecastEl.appendChild(newDiv);
   newDiv.appendChild(newDateP);
   newDiv.appendChild(newImg);
@@ -285,6 +309,7 @@ function buildSearchHistory() {
   }
 }
 
+// Add button for each successful search
 function addSearchHistoryButton(i) {
   var newDiv = document.createElement("div");
   newDiv.textContent = searchHistory[i];
@@ -293,6 +318,7 @@ function addSearchHistoryButton(i) {
   searchHistoryContainerEl.appendChild(newDiv);
 }
 
+// event listener for search history buttons
 searchHistoryContainerEl.addEventListener("click", function(event) {
   var element = event.target;
   // console.log(element);
@@ -307,7 +333,7 @@ searchHistoryContainerEl.addEventListener("click", function(event) {
 
 });
 
-
+// function to convert wind direction in degrees to cardinal direction
 function cardinalDirection(deg) {
   if (isNaN(deg)) {
     return;
@@ -353,5 +379,5 @@ function cardinalDirection(deg) {
   }
 }
 
-
+// runs on page load
 loadSearchHistory();
