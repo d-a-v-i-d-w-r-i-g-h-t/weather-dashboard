@@ -45,6 +45,11 @@ body {
   border-radius: 10px;
 }
 
+.current-weather-title {
+  font-size: 200%;
+  font-weight: bold;
+}
+
 #five-day-forecast {
   display: flex;
   flex-direction: row;
@@ -59,4 +64,8 @@ body {
   background-color: lightblue;
   border-radius: 10px;
 
+}
+
+.forecast-card-date {
+  font-weight: bold;
 }

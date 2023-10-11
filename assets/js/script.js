@@ -81,10 +81,12 @@ var performCurrentWeatherSearch = function(lat, lon) {
             currentWeather.windDirection = data.wind.deg;
             currentWeather.windDirCardinal = cardinalDirection(data.wind.deg);
 
-            console.log("Current weather:");
-            console.log(currentWeather);
+            // console.log("Current weather:");
+            // console.log(currentWeather);
 
             saveSearchHistory(currentWeather.city);
+            addCurrentWeather();
+
           });
       } else {
         alert('Error: ' + response.statusText);
@@ -95,6 +97,41 @@ var performCurrentWeatherSearch = function(lat, lon) {
     });
 };
 
+function addCurrentWeather() {
+
+  document.getElementById("city").textContent = currentWeather.city;
+
+  var newDiv = document.createElement("div");
+  newDiv.setAttribute("id", "current-weather");
+
+  var newTitleP = document.createElement("p");
+  newTitleP.classList.add("current-weather-title");
+
+
+  var newDateP = document.createElement("p");
+  newDateP.classList.add("forecast-card-date");
+  newDateP.textContent =   forecastWeather[index].date.format("MMM D, YYYY");
+
+  var newImg = document.createElement("img");
+  newImg.setAttribute("src", "./assets/images/" + forecastWeather[index].icon + ".png");
+
+  var newTempP = document.createElement("p");
+  newTempP.textContent = "Temp: " + forecastWeather[index].temp + " °F";
+  
+  var newWindspeedP = document.createElement("p");
+  newWindspeedP.textContent = "Wind: " + forecastWeather[index].windSpeed + " MPH, " + forecastWeather[index].windDirCardinal;
+  
+  var newHumidityP = document.createElement("p");
+  newHumidityP.textContent = "Humidity: " + forecastWeather[index].humidity + "%";
+  
+  fiveDayForecastEl.appendChild(newDiv);
+  newDiv.appendChild(newDateP);
+  newDiv.appendChild(newImg);
+  newDiv.appendChild(newTempP);
+  newDiv.appendChild(newWindspeedP);
+  newDiv.appendChild(newHumidityP);
+
+}
 
 var performForecastWeatherSearch = function(lat, lon) {
   // https://openweathermap.org/forecast5
@@ -129,7 +166,7 @@ var performForecastWeatherSearch = function(lat, lon) {
               forecastWeather[i].icon = data.list[i].weather[0].icon;
               forecastWeather[i].temp = Math.round(data.list[i].main.temp);
               forecastWeather[i].humidity = data.list[i].main.humidity;
-              forecastWeather[i].windSpeed = data.list[i].wind.speed;
+              forecastWeather[i].windSpeed = Math.round(data.list[i].wind.speed);
               forecastWeather[i].windDirection = data.list[i].wind.deg;
               forecastWeather[i].windDirCardinal = cardinalDirection(data.list[i].wind.deg);
             }
@@ -149,6 +186,9 @@ var performForecastWeatherSearch = function(lat, lon) {
 
 
 function createFiveDayForecast() {
+  // Empty div
+  fiveDayForecastEl.replaceChildren();
+
   var timeHour;
   // forecasts are every three hours for five days
   // grab forecast time closest to 2:30 pm each day and add data to forecast card
@@ -168,21 +208,29 @@ function addForecastDay(index) {
 
   var newDiv = document.createElement("div");
   newDiv.classList.add("forecast-card");
-  var newP = document.createElement("p");
-  newP.classList.add("forecast-card-date");
-  newP.textContent =   forecastWeather[index].date.format("MMM D, YYYY");
+
+  var newDateP = document.createElement("p");
+  newDateP.classList.add("forecast-card-date");
+  newDateP.textContent =   forecastWeather[index].date.format("MMM D, YYYY");
+
+  var newImg = document.createElement("img");
+  newImg.setAttribute("src", "./assets/images/" + forecastWeather[index].icon + ".png");
+
+  var newTempP = document.createElement("p");
+  newTempP.textContent = "Temp: " + forecastWeather[index].temp + " °F";
+  
+  var newWindspeedP = document.createElement("p");
+  newWindspeedP.textContent = "Wind: " + forecastWeather[index].windSpeed + " MPH, " + forecastWeather[index].windDirCardinal;
+  
+  var newHumidityP = document.createElement("p");
+  newHumidityP.textContent = "Humidity: " + forecastWeather[index].humidity + "%";
   
   fiveDayForecastEl.appendChild(newDiv);
-  newDiv.appendChild(newP);
-
-  forecastWeather[index].icon;
-  forecastWeather[index].temp;
-  forecastWeather[index].humidity;
-  forecastWeather[index].windSpeed;
-  forecastWeather[index].windDirection;
-  forecastWeather[index].windDirCardinal;
-
-
+  newDiv.appendChild(newDateP);
+  newDiv.appendChild(newImg);
+  newDiv.appendChild(newTempP);
+  newDiv.appendChild(newWindspeedP);
+  newDiv.appendChild(newHumidityP);
 }
 
 searchFormEl.addEventListener("submit", function (event) {
