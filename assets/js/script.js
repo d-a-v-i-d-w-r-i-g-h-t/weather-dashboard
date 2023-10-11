@@ -22,10 +22,10 @@ var forecastWeather = {};
 // perform API fetch for lat/lon data based on input location, to be used in weather fetch requests
 var performLocationSearch = function(location) {
   // https://openweathermap.org/api/geocoding-api
-  // http://api.openweathermap.org/geo/1.0/direct?q=
+  // https://api.openweathermap.org/geo/1.0/direct?q=
   // {city name},{state code},{country code}&limit={limit}&appid={API key}
 
-  var geocodeApiURL = "http://api.openweathermap.org/geo/1.0/direct?q=" +
+  var geocodeApiURL = "https://api.openweathermap.org/geo/1.0/direct?q=" +
                         location + "&appid=" + APIKEY;
   // console.log("API URL: " + geocodeApiURL);
 
