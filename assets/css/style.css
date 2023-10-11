@@ -21,11 +21,13 @@ body {
   line-height: 1.6;
 }
 
+/* id selector for CSS grid container */
 #grid-container {
   display: grid;
   grid-template-columns: 1fr 5fr;
 }
 
+/* id selector for search-sidebar */
 #search-sidebar {
   margin-left: 10px;
   margin-right: 10px;
@@ -35,11 +37,12 @@ body {
   border-radius: 10px;
 }
 
-
+/* id selector for results-container */
 #results-container  {
   margin-right: 10px;
 }
 
+/* id selector for current-weather (dynamically created element) */
 #current-weather  {
   width: 100%;
   border: 1px solid #000;
@@ -48,20 +51,24 @@ body {
   border-radius: 10px;
 }
 
+/* class selector for current-weather-title (dynamically created element) */
 .current-weather-title {
   font-size: 200%;
   font-weight: bold;
 }
 
+/* class selector for content-container (dynamically created element) */
 .content-container {
   display: flex;
   align-items: center;
 }
 
+/* class selector for img element in content-container (dynamically created element) */
 .content-container img {
   margin-right: 10px;
 }
 
+/* id selector for five-day-forecast, a flex box (dynamically created element) */
 #five-day-forecast {
   display: flex;
   flex-direction: row;
@@ -69,6 +76,7 @@ body {
 
 }
 
+/* class selector for forecast-card, flexbox content (dynamically created element) */
 .forecast-card {
   flex: 1;
   border: 1px solid #000;
@@ -78,10 +86,12 @@ body {
 
 }
 
+/* class selector for forecast-card-date (dynamically created element) */
 .forecast-card-date {
   font-weight: bold;
 }
 
+/* media query to switch flex direction to column when page becomes too narrow */
 @media (max-width: 800px) {
   #five-day-forecast {
     flex-direction: column;
