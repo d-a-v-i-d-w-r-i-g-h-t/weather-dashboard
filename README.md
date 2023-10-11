@@ -16,7 +16,7 @@ N/A
 
 ## Usage 
 
-When the application is loaded the user is presented with a searh bar. If any previous searches were performed, they will be loaded and clickable under the Search History heading.
+When the application is loaded, the user is presented with a search bar. If any previous searches were performed, they will be loaded and clickable under the Search History heading.
 
 ![Screenshot on page load](assets/images/weather-dashboard-empty.png)
 
