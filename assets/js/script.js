@@ -18,54 +18,7 @@ var currentWeather = {
   windDirection: 0
 }
 
-var fiveDayWeather = {
-  city: "",
-  0: {
-    date: "",
-    icon: "",
-    tempHi: 0,
-    tempLo: 0,
-    humidity: 0,
-    windSpeed: 0,
-    windDirection: 0
-  },
-  1: {
-    date: "",
-    icon: "",
-    tempHi: 0,
-    tempLo: 0,
-    humidity: 0,
-    windSpeed: 0,
-    windDirection: 0
-  },
-  2: {
-    date: "",
-    icon: "",
-    tempHi: 0,
-    tempLo: 0,
-    humidity: 0,
-    windSpeed: 0,
-    windDirection: 0
-  },
-  3: {
-    date: "",
-    icon: "",
-    tempHi: 0,
-    tempLo: 0,
-    humidity: 0,
-    windSpeed: 0,
-    windDirection: 0
-  },
-  4: {
-    date: "",
-    icon: "",
-    tempHi: 0,
-    tempLo: 0,
-    humidity: 0,
-    windSpeed: 0,
-    windDirection: 0
-  }              
-}
+var forecastWeather = {};
 
 
 
@@ -96,7 +49,7 @@ var performLocationSearch = function(location) {
             // console.log("Longitude: " + longitude);
 
             performCurrentWeatherSearch(latitude, longitude);
-            // perform5DayWeatherSearch(latitude, longitude);
+            performForecastWeatherSearch(latitude, longitude);
           });
       } else {
         alert('Error: ' + response.statusText);
@@ -112,20 +65,20 @@ var performCurrentWeatherSearch = function(lat, lon) {
   // https://openweathermap.org/current
   // https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 
-  var currentWeatherApiURL = "https://api.openweathermap.org/data/2.5/weather?lat=" +
-                              lat + "&lon=" + lon + "&appid=" + APIKEY + "&units=imperial";
+  var currentWeatherApiURL = "https://api.openweathermap.org/data/2.5/weather?" +
+                             "lat=" + lat + "&lon=" + lon + "&appid=" + APIKEY + "&units=imperial";
   console.log("API URL: " + currentWeatherApiURL);
 
   fetch(currentWeatherApiURL)
     .then(function(response) {
       if(response.ok) {
-        console.log("Response:");
-        console.log(response);
+        // console.log("Response:");
+        // console.log(response);
         response.json()
           .then(function(data){
-            console.log("Data:");
-            console.log(data);
-            console.log(typeof(data));
+            // console.log("Data:");
+            // console.log(data);
+            // console.log(typeof(data));
 
             currentWeather.city = data.name;
             currentWeather.date = dayjs().format("MMMM D, YYYY");
@@ -135,9 +88,59 @@ var performCurrentWeatherSearch = function(lat, lon) {
             currentWeather.windSpeed = Math.round(data.wind.speed);
             currentWeather.windDirection = data.wind.deg;
 
+            console.log("Current weather:");
             console.log(currentWeather);
 
             saveSearchHistory(currentWeather.city);
+          });
+      } else {
+        alert('Error: ' + response.statusText);
+      }
+    })
+    .catch(function(error) {
+      alert("Unable to connect to OpenWeather");
+    });
+};
+
+
+var performForecastWeatherSearch = function(lat, lon) {
+  // https://openweathermap.org/forecast5
+  // api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
+
+  var forecastWeatherApiURL = "https://api.openweathermap.org/data/2.5/forecast?" +
+                             "lat=" + lat + "&lon=" + lon + "&appid=" + APIKEY + "&units=imperial";
+  console.log("API URL: " + forecastWeatherApiURL);
+
+  fetch(forecastWeatherApiURL)
+    .then(function(response) {
+      if(response.ok) {
+        // console.log("Response:");
+        // console.log(response);
+        response.json()
+          .then(function(data){
+            console.log("Data:");
+            console.log(data);
+            console.log(typeof(data));
+            
+          
+            forecastWeather.city = data.city.name;
+            forecastWeather.timezone = data.city.timezone;
+
+            for (var i = 0; i < data.cnt; i++) {
+              // initialize forecastWeather[i]
+              forecastWeather[i] = {};
+              forecastWeather[i].date = dayjs(data.list[i].dt_txt).add(data.city.timezone, "second");
+              console.log(dayjs(data.list[i].dt_txt).add(data.city.timezone, "second").format("MMMM D, YYYY h:mm a"));
+         
+              forecastWeather[i].icon = data.list[i].weather[0].icon;
+              forecastWeather[i].temp = Math.round(data.list[i].main.temp);
+              forecastWeather[i].humidity = data.list[i].main.humidity;
+              forecastWeather[i].windSpeed = data.list[i].wind.speed;
+              forecastWeather[i].windDirection = data.list[i].wind.deg;
+            }
+
+            console.log(forecastWeather);
+
           });
       } else {
         alert('Error: ' + response.statusText);
