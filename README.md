@@ -20,13 +20,14 @@ N/A
 
 ## Usage 
 
-Provide instructions and examples for use. Include screenshots as needed. 
+When the application is loaded the user is presented with a searh bar. If any previous searches were performed, they will be loaded and clickable under the Search History heading.
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+![Screenshot on page load](assets/images/weather-dashboard-empty.png)
 
-```md
-![alt text](assets/images/screenshot.png)
-```
+After entering a location and clicking "Search!", the page will fetch the weather data for that location and then present current condtions followed by a five-day forecast. If the search string is new, it will be added to the Search History.
+
+![Screenshot showing results and search history](assets/images/weather-dashboard-results.png)
+
 
 
 ## Credits
