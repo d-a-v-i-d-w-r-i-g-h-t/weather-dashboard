@@ -2,7 +2,7 @@
 
 ## Description 
 
-For this project, I was tasked to retrieve weather data from [OpenWeather](https://openweathermap.org/) using their free API. This required three separate fetch requests. The first request converted a queried location into lattitude and longitude coordinates. Those coordiates were then used for two successive fetch requests: one for current weather conditions and one for a five-day forecast.
+For this project, I was tasked to retrieve weather data from [OpenWeather](https://openweathermap.org/) using their free API. This required three separate fetch requests. The first request converted a queried location into lattitude and longitude coordinates. Those coordinates were then used for two successive fetch requests: one for current weather conditions and one for a five-day forecast.
 
 This project also gave me the opportunity to use a combination of grid and flex elements, as well as dynamically adding multiple elements to the page. This included individual elements for the current weather conditions, as well as adding repeated elements for the five-day forecast cards.
 
