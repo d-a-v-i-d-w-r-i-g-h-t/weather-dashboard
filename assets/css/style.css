@@ -1,9 +1,62 @@
-#results-container  {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  margin: 10px;
+  border: 1px solid #000;
+  padding: 5px;
+  background-color: lightblue;
+  border-radius: 10px;
+
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+#grid-container {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+#search-sidebar {
+  margin-left: 10px;
+  margin-right: 10px;
+  border: 1px solid #000;
+  padding: 5px;
   background-color: lightblue;
   border-radius: 10px;
 }
 
-#search-container {
+
+#results-container  {
+  margin-right: 10px;
+  background-color: rgb(255, 81, 0);
+}
+#current-weather  {
+  width: 100%;
+  border: 1px solid #000;
+  padding: 5px;
   background-color: lightblue;
   border-radius: 10px;
+}
+
+#five-day-forecast {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+
+}
+
+.forecast-card {
+  flex: 1;
+  border: 1px solid #000;
+  padding: 5px;
+  background-color: lightblue;
+  border-radius: 10px;
+
 }

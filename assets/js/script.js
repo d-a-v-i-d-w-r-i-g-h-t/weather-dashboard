@@ -2,22 +2,13 @@ var searchFormEl = document.getElementById("search-form");
 var locationInputEl = document.getElementById("location");
 var searchHistoryContainerEl = document.getElementById("search-history-container");
 
+// API Key for OpenWeatherMap.org
 const APIKEY = "8a460ddb56358cc62f71346e740a0abf";
 
 var searchHistory = [];
 var latitude = 0;
 var longitude = 0;
-
-var currentWeather = {
-  date: "",
-  city: "",
-  icon: "",
-  temperature: 0,
-  humidity: 0,
-  windSpeed: 0,
-  windDirection: 0
-}
-
+var currentWeather = {};
 var forecastWeather = {};
 
 
@@ -87,6 +78,7 @@ var performCurrentWeatherSearch = function(lat, lon) {
             currentWeather.humidity = data.main.humidity;
             currentWeather.windSpeed = Math.round(data.wind.speed);
             currentWeather.windDirection = data.wind.deg;
+            currentWeather.windDirCardinal = cardinalDirection(data.wind.deg);
 
             console.log("Current weather:");
             console.log(currentWeather);
@@ -137,6 +129,7 @@ var performForecastWeatherSearch = function(lat, lon) {
               forecastWeather[i].humidity = data.list[i].main.humidity;
               forecastWeather[i].windSpeed = data.list[i].wind.speed;
               forecastWeather[i].windDirection = data.list[i].wind.deg;
+              forecastWeather[i].windDirCardinal = cardinalDirection(data.list[i].wind.deg);
             }
 
             console.log(forecastWeather);
@@ -151,6 +144,38 @@ var performForecastWeatherSearch = function(lat, lon) {
     });
 };
 
+
+function createFiveDayForecast() {
+  var timeHour;
+  // forecasts are every three hours for five days
+  // grab forecast time closest to 2:30 pm each day and add data to forecast card
+  for (var i = 0; i < forecastWeather.length; i++) {
+    timeHour = forecastWeather[i].date.hour();
+    if (timeHour > 1 && timeHour <= 4) {
+      addForecastDay(i);
+    }
+  }
+}
+
+function addForecastDay(index) {
+// create card with designnated data
+
+  var newDiv = document.createElement("div");
+  newDiv.classList.add("forecast-card");
+  var newP = document.createElement("p");
+  newP.classList.add("forecast-card-date");
+  newP.textContent =   forecastWeather[index].date;
+
+
+  forecastWeather[index].icon;
+  forecastWeather[index].temp;
+  forecastWeather[index].humidity;
+  forecastWeather[index].windSpeed;
+  forecastWeather[index].windDirection;
+  forecastWeather[index].windDirCardinal;
+
+
+}
 
 searchFormEl.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -225,5 +250,52 @@ searchHistoryContainerEl.addEventListener("click", function(event) {
   }
 
 });
+
+
+function cardinalDirection(deg) {
+  if (isNaN(deg)) {
+    return;
+  }
+
+  // ensure angle is positive and within the range 0 <= deg < 360
+  deg = (deg % 360 + 360) % 360;
+
+  if (deg < 11.25) {
+    return "N";
+  } else if (deg < 33.75) {
+    return "NNE";
+  } else if (deg < 56.25) {
+    return "NE";
+  } else if (deg < 78.75) {
+    return "ENE";
+  } else if (deg < 101.25) {
+    return "E";
+  } else if (deg < 123.75) {
+    return "ESE";
+  } else if (deg < 146.25) {
+    return "SE";
+  } else if (deg < 168.75) {
+    return "SSE";
+  } else if (deg < 191.25) {
+    return "S";
+  } else if (deg < 213.75) {
+    return "SSW";
+  } else if (deg < 236.25) {
+    return "SW";
+  } else if (deg < 258.75) {
+    return "WSW";
+  } else if (deg < 281.25) {
+    return "W";
+  } else if (deg < 303.75) {
+    return "WNW";
+  } else if (deg < 326.25) {
+    return "NW";
+  } else if (deg < 348.75) {
+    return "NNW";
+  } else {
+    return "N";
+  }
+}
+
 
 loadSearchHistory();
