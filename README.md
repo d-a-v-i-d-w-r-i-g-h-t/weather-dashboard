@@ -30,7 +30,7 @@ After entering a location and clicking "Search!", the page will fetch the weathe
 
 I used [Day.js](https://day.js.org/en/) to compare and work with date elements.
 
-I found a great deal of useful information from [OpenWeather](https://openweathermap.org/) for the three different fetch queries I had to perform.
+I found a great deal of useful information from [OpenWeather](https://openweathermap.org/) for the three different fetch queries I had to perform: [geocoding](https://openweathermap.org/api/geocoding-api), [current weather conditions](https://openweathermap.org/weather-conditions), and the [five-day weather forecast](https://openweathermap.org/forecast5).
 
 
 ## License
