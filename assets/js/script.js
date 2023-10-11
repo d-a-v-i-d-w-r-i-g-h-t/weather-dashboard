@@ -1,3 +1,4 @@
+// pointers to key page elements
 var searchFormEl = document.getElementById("search-form");
 var locationInputEl = document.getElementById("location");
 var searchHistoryContainerEl = document.getElementById("search-history-container");
@@ -6,6 +7,7 @@ var resultsContainerEl = document.getElementById("results-container");
 // API Key for OpenWeatherMap.org
 const APIKEY = "8a460ddb56358cc62f71346e740a0abf";
 
+// global variables
 var searchHistory = [];
 var latitude = 0;
 var longitude = 0;
@@ -14,7 +16,10 @@ var forecastWeather = {};
 
 
 
-
+   //------------------------------------//
+  //  Functions: performLocationSearch  //
+ //------------------------------------//
+// perform API fetch for lat/lon data based on input location, to be used in weather fetch requests
 var performLocationSearch = function(location) {
   // https://openweathermap.org/api/geocoding-api
   // http://api.openweathermap.org/geo/1.0/direct?q=
@@ -22,7 +27,7 @@ var performLocationSearch = function(location) {
 
   var geocodeApiURL = "http://api.openweathermap.org/geo/1.0/direct?q=" +
                         location + "&appid=" + APIKEY;
-  console.log("API URL: " + geocodeApiURL);
+  // console.log("API URL: " + geocodeApiURL);
 
   fetch(geocodeApiURL)
     .then(function(response) {
@@ -53,13 +58,17 @@ var performLocationSearch = function(location) {
 };
 
 
+   //------------------------------------------//
+  //  Functions: performCurrentWeatherSearch  //
+ //------------------------------------------//
+// perform API fetch for current weather data -- parse and save in object variable
 var performCurrentWeatherSearch = function(lat, lon) {
   // https://openweathermap.org/current
   // https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 
   var currentWeatherApiURL = "https://api.openweathermap.org/data/2.5/weather?" +
                              "lat=" + lat + "&lon=" + lon + "&appid=" + APIKEY + "&units=imperial";
-  console.log("API URL: " + currentWeatherApiURL);
+  // console.log("API URL: " + currentWeatherApiURL);
 
   fetch(currentWeatherApiURL)
     .then(function(response) {
@@ -97,6 +106,11 @@ var performCurrentWeatherSearch = function(lat, lon) {
     });
 };
 
+
+   //--------------------------------//
+  //  Functions: addCurrentWeather  //
+ //--------------------------------//
+// add current weather by creating elements and appending to page
 function addCurrentWeather() {
   // empty div
   resultsContainerEl.replaceChildren();
@@ -144,13 +158,17 @@ function addCurrentWeather() {
   newTextDiv.appendChild(newHumidityP);
 }
 
+   //-------------------------------------------//
+  //  Functions: performForecastWeatherSearch  //
+ //-------------------------------------------//
+// perform API fetch for five-day forecast data -- parse and save in object variable
 var performForecastWeatherSearch = function(lat, lon) {
   // https://openweathermap.org/forecast5
   // api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 
   var forecastWeatherApiURL = "https://api.openweathermap.org/data/2.5/forecast?" +
                              "lat=" + lat + "&lon=" + lon + "&appid=" + APIKEY + "&units=imperial";
-  console.log("API URL: " + forecastWeatherApiURL);
+  // console.log("API URL: " + forecastWeatherApiURL);
 
   fetch(forecastWeatherApiURL)
     .then(function(response) {
@@ -159,9 +177,9 @@ var performForecastWeatherSearch = function(lat, lon) {
         // console.log(response);
         response.json()
           .then(function(data){
-            console.log("Data:");
-            console.log(data);
-            console.log(typeof(data));
+            // console.log("Data:");
+            // console.log(data);
+            // console.log(typeof(data));
             
           
             forecastWeather.city = data.city.name;
@@ -182,8 +200,8 @@ var performForecastWeatherSearch = function(lat, lon) {
               forecastWeather[i].windDirCardinal = cardinalDirection(data.list[i].wind.deg);
             }
 
-            console.log("forecastWeather: ");
-            console.log(forecastWeather);
+            // console.log("forecastWeather: ");
+            // console.log(forecastWeather);
             createFiveDayForecast();
           });
       } else {
@@ -199,7 +217,8 @@ var performForecastWeatherSearch = function(lat, lon) {
    //------------------------------------//
   //  Functions: createFiveDayForecast  //
  //------------------------------------//
-// create forecast card with data from designated index
+// create div and get consistent afternoon data point for each forecast day
+// (five day forecast provides data every 3 hours)
 function createFiveDayForecast() {
   var newDiv = document.createElement("div");
   newDiv.setAttribute("id", "five-day-forecast");
@@ -260,8 +279,9 @@ function addForecastDay(index) {
 searchFormEl.addEventListener("submit", function (event) {
   event.preventDefault();
 
+  // trim leading and trailing spaces; replace internal spaces with "%20" character
   var searchLocation = locationInputEl.value.trim().replace(/ /g, "%20");
-  console.log("Search location: " + searchLocation);
+  // console.log("Search location: " + searchLocation);
 
   if (searchLocation) {
     performLocationSearch(searchLocation);
