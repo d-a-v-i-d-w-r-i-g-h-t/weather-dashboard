@@ -1,6 +1,7 @@
 var searchFormEl = document.getElementById("search-form");
 var locationInputEl = document.getElementById("location");
 var searchHistoryContainerEl = document.getElementById("search-history-container");
+var fiveDayForecastEl = document.getElementById("five-day-forecast");
 
 // API Key for OpenWeatherMap.org
 const APIKEY = "8a460ddb56358cc62f71346e740a0abf";
@@ -117,12 +118,13 @@ var performForecastWeatherSearch = function(lat, lon) {
           
             forecastWeather.city = data.city.name;
             forecastWeather.timezone = data.city.timezone;
+            forecastWeather.count = data.cnt;
 
             for (var i = 0; i < data.cnt; i++) {
               // initialize forecastWeather[i]
               forecastWeather[i] = {};
               forecastWeather[i].date = dayjs(data.list[i].dt_txt).add(data.city.timezone, "second");
-              console.log(dayjs(data.list[i].dt_txt).add(data.city.timezone, "second").format("MMMM D, YYYY h:mm a"));
+              // console.log(dayjs(data.list[i].dt_txt).add(data.city.timezone, "second").format("MMMM D, YYYY h:mm a"));
          
               forecastWeather[i].icon = data.list[i].weather[0].icon;
               forecastWeather[i].temp = Math.round(data.list[i].main.temp);
@@ -132,8 +134,9 @@ var performForecastWeatherSearch = function(lat, lon) {
               forecastWeather[i].windDirCardinal = cardinalDirection(data.list[i].wind.deg);
             }
 
+            console.log("forecastWeather: ");
             console.log(forecastWeather);
-
+            createFiveDayForecast();
           });
       } else {
         alert('Error: ' + response.statusText);
@@ -149,9 +152,12 @@ function createFiveDayForecast() {
   var timeHour;
   // forecasts are every three hours for five days
   // grab forecast time closest to 2:30 pm each day and add data to forecast card
-  for (var i = 0; i < forecastWeather.length; i++) {
+  for (var i = 0; i < forecastWeather.count; i++) {
     timeHour = forecastWeather[i].date.hour();
-    if (timeHour > 1 && timeHour <= 4) {
+    // console.log(timeHour);
+
+    if (timeHour > 13 && timeHour <= 16) {
+      // console.log(timeHour);
       addForecastDay(i);
     }
   }
@@ -164,8 +170,10 @@ function addForecastDay(index) {
   newDiv.classList.add("forecast-card");
   var newP = document.createElement("p");
   newP.classList.add("forecast-card-date");
-  newP.textContent =   forecastWeather[index].date;
-
+  newP.textContent =   forecastWeather[index].date.format("MMM D, YYYY");
+  
+  fiveDayForecastEl.appendChild(newDiv);
+  newDiv.appendChild(newP);
 
   forecastWeather[index].icon;
   forecastWeather[index].temp;
